@@ -37,15 +37,6 @@ const creatKeys = () => {
   const values = Object.values(keyObjEn);
   for (let i = 0; i < keys.length; i += 1) {
     const creatKey = document.createElement('div');
-    if (keys[i] === 'ArrowLeft') {
-      values[i] = '🠔';
-    } else if (keys[i] === 'ArrowUp') {
-      values[i] = '🠕';
-    } else if (keys[i] === 'ArrowRight') {
-      values[i] = '🠖';
-    } else if (keys[i] === 'ArrowDown') {
-      values[i] = '🠗';
-    }
     creatKey.textContent = values[i];
     creatKey.className = 'key-board__key';
     creatKey.dataset.code = keys[i];
@@ -67,8 +58,23 @@ const arrKeyCodeRu = {
 const keys = document.getElementsByClassName('key-board__key');
 console.log(keys);
 document.addEventListener('keydown', (event) => {
-  console.log(keyObjEn[event.code]);
-  input.value += keyObjEn[event.code];
+  for (let i = 0; i < keys.length; i += 1) {
+    if (keys[i].dataset.code === event.code) {
+      console.log(keys[i].dataset.code);
+      keys[i].classList.add('key-board__key--active');
+      console.log(keyObjEn[event.code]);
+      input.value += keyObjEn[event.code];
+    }
+  }
+});
+
+document.addEventListener('keyup', (event) => {
+  for (let i = 0; i < keys.length; i += 1) {
+    if (keys[i].dataset.code === event.code) {
+      console.log(keys[i].dataset.code);
+      keys[i].classList.remove('key-board__key--active');
+    }
+  }
 });
 
 /* for copirate keys code in arr

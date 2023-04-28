@@ -58,10 +58,10 @@ const keyObjEn = {
   AltLeft: 'Alt',
   Space: ' ',
   AltRight: 'Alt',
-  ArrowLeft: 'ArrowLeft',
-  ArrowUp: 'ArrowUp',
-  ArrowRight: 'ArrowRight',
-  ArrowDown: 'ArrowDown',
+  ArrowLeft: '🠔',
+  ArrowUp: '🠕',
+  ArrowRight: '🠖',
+  ArrowDown: '🠗',
   ControlRight: 'Control',
 };
 export default keyObjEn;

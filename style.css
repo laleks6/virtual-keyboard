@@ -36,6 +36,7 @@
     transition:all 1s ease-in;
 }
 
+
 .block-key-board {
     display: flex;
     flex-wrap: wrap;
@@ -71,5 +72,10 @@
 
 .key-board__key:active{
     background-color:rgb(56, 92, 223);
+    transition: all 0.2s linear;
+}
+
+.key-board__key--active {
+    background-color:rgb(234, 237, 248);
     transition: all 0.2s linear;
 }
