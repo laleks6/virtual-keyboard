@@ -41,6 +41,9 @@ const creatKeys = () => {
     const creatKey = document.createElement('div');
     creatKey.textContent = values[i];
     creatKey.className = 'key-board__key';
+    if (values[i].length > 2) {
+      creatKey.classList.add('key-board__key___key--bastard');
+    }
     creatKey.dataset.code = keys[i];
     keyBoardBlock.append(creatKey);
     console.log(keys[i]);
@@ -93,6 +96,24 @@ const secondClickHandlerKey = (event) => {
     document.removeEventListener('keyup', secondClickHandlerKey);
   }
 };
+const addTextkeyInInput = (event) => {
+  let text;
+  for (let i = 0; i < keys.length; i += 1) {
+    if (keys[i].dataset.code === event.code) {
+      console.log(keys[i].dataset.code);
+      keys[i].classList.add('key-board__key--active');
+      if (keyBoardBlock.classList.contains('block-key-board--eng')) {
+        text = keyObj.keyLengEn[event.code];
+      } else if (keyBoardBlock.classList.contains('block-key-board--ru')) {
+        text = keyObj.keyLengRu[event.code];
+      }
+      console.log(text);
+      if (!keys[i].classList.contains('key-board__key___key--bastard')) {
+        input.value += text;
+      }
+    }
+  }
+};
 const checKeyDown = (event) => {
   if (event.altKey) {
     console.log('нажад алт');
@@ -100,14 +121,7 @@ const checKeyDown = (event) => {
     document.addEventListener('keyup', secondClickHandlerKey);
     document.addEventListener('keydown', checKeyDown);
   }
-  for (let i = 0; i < keys.length; i += 1) {
-    if (keys[i].dataset.code === event.code) {
-      console.log(keys[i].dataset.code);
-      keys[i].classList.add('key-board__key--active');
-      console.log(keyObj.keyLengEn[event.code]);
-      input.value += keyObj.keyLengEn[event.code];
-    }
-  }
+  addTextkeyInInput(event);
 };
 document.addEventListener('keydown', checKeyDown);
 
