@@ -16,7 +16,7 @@ const input = document.createElement('textarea');
 input.className = 'textarea';
 
 const keyBoardBlock = document.createElement('div');
-keyBoardBlock.className = 'block-key-board';
+keyBoardBlock.className = 'block-key-board block-key-board--eng';
 
 page.prepend(keyBoardBlock);
 page.prepend(screen);
@@ -35,6 +35,8 @@ console.log(keyObj.keyLengEn);
 const creatKeys = () => {
   const keys = Object.keys(keyObj.keyLengEn);
   const values = Object.values(keyObj.keyLengEn);
+  console.log(`${keys}это мы`);
+  console.log(`${values}это мы`);
   for (let i = 0; i < keys.length; i += 1) {
     const creatKey = document.createElement('div');
     creatKey.textContent = values[i];
@@ -46,11 +48,21 @@ const creatKeys = () => {
 };
 creatKeys();
 
-const changeLetterCase = (argument) => {
-  if (argument === 'upper') {
-
-  } else {
-
+const changeLanguage = () => {
+  const keysBoard = document.getElementsByClassName('key-board__key');
+  let keys;
+  let values;
+  if (keyBoardBlock.classList.contains('block-key-board--eng')) {
+    keys = Object.keys(keyObj.keyLengEn);
+    values = Object.values(keyObj.keyLengEn);
+  } else if (keyBoardBlock.classList.contains('block-key-board--ru')) {
+    keys = Object.keys(keyObj.keyLengRu);
+    values = Object.values(keyObj.keyLengRu);
+  }
+  for (let i = 0; i < keys.length; i += 1) {
+    if (values[i] !== keysBoard[i].textContent) {
+      keysBoard[i].textContent = values[i];
+    }
   }
 };
 
@@ -67,6 +79,14 @@ console.log(keys);
 const secondClickHandlerKey = (event) => {
   if (event.shiftKey) {
     console.log('shift сработал');
+    if (keyBoardBlock.classList.contains('block-key-board--eng')) {
+      keyBoardBlock.classList.remove('block-key-board--eng');
+      keyBoardBlock.classList.add('block-key-board--ru');
+    } else {
+      keyBoardBlock.classList.remove('block-key-board--ru');
+      keyBoardBlock.classList.add('block-key-board--eng');
+    }
+    changeLanguage();
     document.removeEventListener('keyup', secondClickHandlerKey);
   } else {
     console.log('убрал');
@@ -99,47 +119,7 @@ document.addEventListener('keyup', (event) => {
     }
   }
 });
-const arrKeyCodeRu = {
-  KeyQ: 'й',
-  KeyW: 'ц',
-  KeyE: 'у',
-  KeyR: 'к',
-  KeyT: 'е',
-  KeyY: 'н',
-  KeyU: 'г',
-  KeyI: 'ш',
-  KeyO: 'щ',
-  KeyP: 'з',
-  BracketLeft: 'х',
-  BracketRight: 'ъ',
-  KeyA: 'ф',
-  KeyS: 'ы',
-  KeyD: 'в',
-  KeyF: 'а',
-  KeyG: 'п',
-  KeyH: 'р',
-  KeyJ: 'о',
-  KeyK: 'л',
-  KeyL: 'д',
-  Semicolon: 'ж',
-  Quote: 'э',
-  KeyZ: 'я',
-  KeyX: 'ч',
-  KeyC: 'с',
-  KeyV: 'м',
-  KeyB: 'и',
-  KeyN: 'т',
-  KeyM: 'ь',
-  Comma: 'б',
-  Period: 'ю',
-};
-document.addEventListener('keydown', (event) => {
-  const code = event;
-  console.log(event.key);
-  console.log(code);
-  arrKeyCodeRu[event.code] = event.key;
-  console.log(arrKeyCodeRu);
-});
+
 /* for copirate keys code in arr
 document.addEventListener('keydown', (event) => {
   const code = event;
