@@ -1,6 +1,6 @@
-import keyObjEn from './key.js';
+import keyObj from './key.js';
 
-console.log(keyObjEn);
+console.log(keyObj);
 /* virtylakeybords */
 
 /* creat blocks */
@@ -31,10 +31,10 @@ screen.append(input);
   keyBoardBlock.append(key);
 };
 creatKeys(); */
-console.log(keyObjEn);
+console.log(keyObj.keyLengEn);
 const creatKeys = () => {
-  const keys = Object.keys(keyObjEn);
-  const values = Object.values(keyObjEn);
+  const keys = Object.keys(keyObj.keyLengEn);
+  const values = Object.values(keyObj.keyLengEn);
   for (let i = 0; i < keys.length; i += 1) {
     const creatKey = document.createElement('div');
     creatKey.textContent = values[i];
@@ -46,27 +46,50 @@ const creatKeys = () => {
 };
 creatKeys();
 
+const changeLetterCase = (argument) => {
+  if (argument === 'upper') {
+
+  } else {
+
+  }
+};
+
 const mouseClick = (event) => {
   console.log(event);
   console.log(event.target.innerText);
   input.value += event.target.innerText;
 };
 keyBoardBlock.addEventListener('mousedown', mouseClick);
-const arrKeyCodeRu = {
-};
 
 const keys = document.getElementsByClassName('key-board__key');
 console.log(keys);
-document.addEventListener('keydown', (event) => {
+
+const secondClickHandlerKey = (event) => {
+  if (event.shiftKey) {
+    console.log('shift сработал');
+    document.removeEventListener('keyup', secondClickHandlerKey);
+  } else {
+    console.log('убрал');
+    document.removeEventListener('keyup', secondClickHandlerKey);
+  }
+};
+const checKeyDown = (event) => {
+  if (event.altKey) {
+    console.log('нажад алт');
+    event.preventDefault();
+    document.addEventListener('keyup', secondClickHandlerKey);
+    document.addEventListener('keydown', checKeyDown);
+  }
   for (let i = 0; i < keys.length; i += 1) {
     if (keys[i].dataset.code === event.code) {
       console.log(keys[i].dataset.code);
       keys[i].classList.add('key-board__key--active');
-      console.log(keyObjEn[event.code]);
-      input.value += keyObjEn[event.code];
+      console.log(keyObj.keyLengEn[event.code]);
+      input.value += keyObj.keyLengEn[event.code];
     }
   }
-});
+};
+document.addEventListener('keydown', checKeyDown);
 
 document.addEventListener('keyup', (event) => {
   for (let i = 0; i < keys.length; i += 1) {
@@ -76,7 +99,47 @@ document.addEventListener('keyup', (event) => {
     }
   }
 });
-
+const arrKeyCodeRu = {
+  KeyQ: 'й',
+  KeyW: 'ц',
+  KeyE: 'у',
+  KeyR: 'к',
+  KeyT: 'е',
+  KeyY: 'н',
+  KeyU: 'г',
+  KeyI: 'ш',
+  KeyO: 'щ',
+  KeyP: 'з',
+  BracketLeft: 'х',
+  BracketRight: 'ъ',
+  KeyA: 'ф',
+  KeyS: 'ы',
+  KeyD: 'в',
+  KeyF: 'а',
+  KeyG: 'п',
+  KeyH: 'р',
+  KeyJ: 'о',
+  KeyK: 'л',
+  KeyL: 'д',
+  Semicolon: 'ж',
+  Quote: 'э',
+  KeyZ: 'я',
+  KeyX: 'ч',
+  KeyC: 'с',
+  KeyV: 'м',
+  KeyB: 'и',
+  KeyN: 'т',
+  KeyM: 'ь',
+  Comma: 'б',
+  Period: 'ю',
+};
+document.addEventListener('keydown', (event) => {
+  const code = event;
+  console.log(event.key);
+  console.log(code);
+  arrKeyCodeRu[event.code] = event.key;
+  console.log(arrKeyCodeRu);
+});
 /* for copirate keys code in arr
 document.addEventListener('keydown', (event) => {
   const code = event;
