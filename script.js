@@ -44,6 +44,31 @@ const creatKeys = () => {
     if (values[i].length > 2) {
       creatKey.classList.add('key-board__key___key--bastard');
     }
+    if (keys[i] === 'Backspace' || keys[i] === 'CapsLock') {
+      creatKey.classList.add('keyMaxSize');
+    }
+    if (keys[i] === 'Tab') {
+      creatKey.classList.add('keySizeTub');
+      creatKey.textContent = keys[i];
+    }
+    if (keys[i] === 'Delete') {
+      creatKey.classList.add('keySizeTub');
+    }
+    if (keys[i] === 'Enter') {
+      creatKey.classList.add('keySizeEnter');
+    }
+    if (keys[i] === 'ShiftLeft') {
+      creatKey.classList.add('keyMaxSize');
+    }
+    if (keys[i] === 'ShiftRight') {
+      creatKey.classList.add('keySizeEnter');
+    }
+    if (keys[i] === 'Space') {
+      creatKey.classList.add('keySizeSpace');
+    }
+    if (keys[i] === 'ControlLeft' || keys[i] === 'MetaLeft' || keys[i] === 'AltLeft' || keys[i] === 'AltRight') {
+      creatKey.classList.add('keySizeTub');
+    }
     creatKey.dataset.code = keys[i];
     keyBoardBlock.append(creatKey);
     console.log(keys[i]);
