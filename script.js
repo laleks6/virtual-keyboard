@@ -74,6 +74,7 @@ const creatKeys = () => {
     console.log(keys[i]);
   }
 };
+
 creatKeys();
 const allKeys = document.getElementsByClassName('key-board__key');
 
@@ -128,24 +129,37 @@ const addTextkeyInInput = (event) => {
     }
   }
 };
-/* key pressing an shift for switch language */
-const secondClickHandlerKey = (event) => {
-  if (event.shiftKey) {
-    console.log('shift сработал');
-    if (keyBoardBlock.classList.contains('block-key-board--eng')) {
-      keyBoardBlock.classList.remove('block-key-board--eng');
-      keyBoardBlock.classList.add('block-key-board--ru');
-    } else {
-      keyBoardBlock.classList.remove('block-key-board--ru');
-      keyBoardBlock.classList.add('block-key-board--eng');
-    }
-    changeLanguage();
-    document.removeEventListener('keyup', secondClickHandlerKey);
+
+const backspaceInInput = () => {
+  const countDelete = input.selectionStart;
+  const resultInput = input.value.split('');
+  const removing = resultInput.splice(countDelete - 1, 1);
+  console.log(input.selectionStart);
+  console.log(removing);
+  console.log(resultInput);
+  if (countDelete < 1) {
+    input.selectionStart = countDelete;
+    input.selectionEnd = countDelete;
   } else {
-    console.log('убрал');
-    document.removeEventListener('keyup', secondClickHandlerKey);
+    input.value = resultInput.join('');
+    input.selectionStart = countDelete - 1;
+    input.selectionEnd = countDelete - 1;
   }
+  input.focus();
 };
+const deleteInInput = () => {
+  const countDelete = input.selectionStart;
+  const resultInput = input.value.split('');
+  const removing = resultInput.splice(countDelete, 1);
+  console.log(input.selectionStart);
+  console.log(removing);
+  console.log(resultInput);
+  input.value = resultInput.join('');
+  input.selectionEnd = countDelete;
+  input.selectionStart = countDelete;
+  input.focus();
+};
+deleteInInput();
 
 const shiftMod = (event) => {
   let keys;
@@ -207,18 +221,18 @@ const shiftMod = (event) => {
     }
   }
 };
-const capsMod = (event) => {
+
+const capsMod = () => {
   let keys;
   let values;
-  console.log(`shif Active -  ${event.shiftKey}`);
   if (keyBoardBlock.classList.contains('caps--active')) {
-    console.log('SHIFT MOD On');
+    console.log('CAPS MOD On');
     if (keyBoardBlock.classList.contains('block-key-board--eng')) {
       keys = Object.keys(keyObj.keyModEng);
       values = Object.values(keyObj.keyModEng);
       for (let i = 0; i < keys.length; i += 1) {
         for (let k = 0; k < allKeys.length; k += 1) {
-          if (keys[i] === allKeys[k].dataset.code) {
+          if (allKeys[k].dataset.code.length === 4 && keys[i] === allKeys[k].dataset.code) {
             console.log(`keys = ${keys[i]}  data = ${allKeys[k].dataset.code}`);
             allKeys[k].textContent = values[i];
           }
@@ -230,17 +244,25 @@ const capsMod = (event) => {
       values = Object.values(keyObj.keyModRu);
       for (let i = 0; i < keys.length; i += 1) {
         for (let k = 0; k < allKeys.length; k += 1) {
-          if (keys[i] === allKeys[k].dataset.code) {
+          if (allKeys[k].dataset.code.length === 4 && keys[i] === allKeys[k].dataset.code) {
             console.log(`keys = ${keys[i]}  data = ${allKeys[k].dataset.code}`);
             allKeys[k].textContent = values[i];
+          } else if (allKeys[k].dataset.code === 'Backquote'
+                    || allKeys[k].dataset.code === 'BracketLeft'
+                    || allKeys[k].dataset.code === 'BracketRight'
+                    || allKeys[k].dataset.code === 'Semicolon'
+                    || allKeys[k].dataset.code === 'Quote'
+                    || allKeys[k].dataset.code === 'Comma'
+                    || allKeys[k].dataset.code === 'Period') {
+            console.log(`Лkeys = ${keys[i]}  Лdata = ${allKeys[k].dataset.code}`);
+            allKeys[k].textContent = keyObj.keyModRu[allKeys[k].dataset.code];
           }
         }
       }
     }
   }
   if (!keyBoardBlock.classList.contains('caps--active')) {
-    console.log(`shif Active -  ${event.shiftKey}`);
-    console.log('SHIFT MOD Off');
+    console.log('CAPS MOD Off');
     if (keyBoardBlock.classList.contains('block-key-board--eng')) {
       keys = Object.keys(keyObj.keyLengEn);
       values = Object.values(keyObj.keyLengEn);
@@ -267,10 +289,31 @@ const capsMod = (event) => {
     }
   }
 };
+
+/* key pressing an shift for switch language */
+const secondClickHandlerKey = (event) => {
+  if (event.shiftKey) {
+    console.log('shift сработал');
+    if (keyBoardBlock.classList.contains('block-key-board--eng')) {
+      keyBoardBlock.classList.remove('block-key-board--eng');
+      keyBoardBlock.classList.add('block-key-board--ru');
+    } else {
+      keyBoardBlock.classList.remove('block-key-board--ru');
+      keyBoardBlock.classList.add('block-key-board--eng');
+    }
+    changeLanguage();
+    document.removeEventListener('keyup', secondClickHandlerKey);
+    capsMod(event);
+  } else {
+    console.log('убрал');
+    document.removeEventListener('keyup', secondClickHandlerKey);
+  }
+};
+
 const checKeyDown = (event) => {
+  event.preventDefault();
   if (event.altKey) {
     console.log('нажад алт');
-    event.preventDefault();
     document.addEventListener('keyup', secondClickHandlerKey);
     document.addEventListener('keydown', checKeyDown);
   }
@@ -288,6 +331,12 @@ const checKeyDown = (event) => {
       keyBoardBlock.classList.toggle('caps--active');
       capsMod(event);
     }
+  }
+  if (event.code === 'Backspace') {
+    backspaceInInput();
+  }
+  if (event.code === 'Delete') {
+    deleteInInput();
   }
   addTextkeyInInput(event);
 };
