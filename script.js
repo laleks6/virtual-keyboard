@@ -96,18 +96,6 @@ const changeLanguage = () => {
   }
 };
 
-/* mouse event */
-const mouseClick = (event) => {
-  console.log(event);
-  console.log(event.target.innerText);
-  console.log(event.target);
-  if (!event.target.classList.contains('key-board__key___key--bastard')) {
-    input.value += event.target.innerText;
-  }
-};
-keyBoardBlock.addEventListener('mousedown', mouseClick);
-console.log(allKeys);
-
 /* key click */
 
 /* text entry on key click  */
@@ -159,7 +147,10 @@ const deleteInInput = () => {
   input.selectionStart = countDelete;
   input.focus();
 };
-deleteInInput();
+const enterInInput = () => {
+  input.value = `${input.value.substring(0, input.selectionStart)
+  }\n${input.value.substring(input.selectionEnd, input.value.length)}`;
+};
 
 const shiftMod = (event) => {
   let keys;
@@ -338,6 +329,9 @@ const checKeyDown = (event) => {
   if (event.code === 'Delete') {
     deleteInInput();
   }
+  if (event.code === 'Enter') {
+    enterInInput();
+  }
   addTextkeyInInput(event);
 };
 document.addEventListener('keydown', checKeyDown);
@@ -357,6 +351,50 @@ const checKeyUp = (event) => {
   }
 };
 document.addEventListener('keyup', checKeyUp);
+
+/* mouse event */
+const mouseClickDown = (event) => {
+  if (event.target.dataset.code === 'ShiftLeft' || event.target.dataset.code === 'ShiftRight') {
+    console.log(event.shiftKey);
+    keyBoardBlock.classList.toggle('shift--active');
+    shiftMod(event);
+  }
+  if (event.target.dataset.code === 'CapsLock') {
+    if (keyBoardBlock.classList.contains('caps--active')) {
+      keyBoardBlock.classList.toggle('caps--active');
+      capsMod(event);
+    } else {
+      keyBoardBlock.classList.toggle('caps--active');
+      capsMod(event);
+    }
+  }
+  if (event.target.dataset.code === 'Backspace') {
+    backspaceInInput();
+  }
+  if (event.target.dataset.code === 'Delete') {
+    deleteInInput();
+  }
+  if (event.target.dataset.code === 'Enter') {
+    enterInInput();
+  }
+  addTextkeyInInput(event);
+  if (!event.target.classList.contains('key-board__key___key--bastard')) {
+    input.value += event.target.innerText;
+  }
+};
+keyBoardBlock.addEventListener('mousedown', mouseClickDown);
+
+const mouseClickUp = (event) => {
+  console.log(event.target.dataset.code);
+  console.log(event);
+  if (keyBoardBlock.classList.contains('shift--active')) {
+    keyBoardBlock.classList.toggle('shift--active');
+    console.log('ppppppp');
+    shiftMod(event);
+  }
+};
+keyBoardBlock.addEventListener('mouseup', mouseClickUp);
+console.log(allKeys);
 
 /* for copirate keys code in arr
 document.addEventListener('keydown', (event) => {
