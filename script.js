@@ -1,6 +1,15 @@
 import keyObj from './key.js';
 
 console.log(keyObj);
+if (localStorage.getItem('leng') === 'en') {
+  localStorage.setItem('leng', 'en');
+} else if (localStorage.getItem('leng') === 'ru') {
+  localStorage.setItem('leng', 'ru');
+} else {
+  localStorage.setItem('leng', 'en');
+}
+
+console.log(localStorage.getItem('num'));
 /* virtylakeybords */
 
 /* creat blocks */
@@ -18,6 +27,21 @@ input.className = 'textarea';
 const keyBoardBlock = document.createElement('div');
 keyBoardBlock.className = 'block-key-board block-key-board--eng';
 
+const rules = document.createElement('div');
+rules.className = 'rules';
+
+const switchRul = document.createElement('span');
+switchRul.className = 'rules_switch';
+switchRul.textContent = 'AltLeft + Shift - переключение языка';
+
+const imgWin = document.createElement('img');
+imgWin.className = 'rules_img-win';
+imgWin.src = './pngwing.com.png';
+
+rules.prepend(switchRul);
+rules.prepend(imgWin);
+
+page.prepend(rules);
 page.prepend(keyBoardBlock);
 page.prepend(screen);
 screen.append(input);
@@ -33,8 +57,14 @@ screen.append(input);
 creatKeys(); */
 console.log(keyObj.keyLengEn);
 const creatKeys = () => {
-  const keys = Object.keys(keyObj.keyLengEn);
-  const values = Object.values(keyObj.keyLengEn);
+  let leng;
+  if (localStorage.getItem('leng') === 'en') {
+    leng = keyObj.keyLengEn;
+  } else if (localStorage.getItem('leng') === 'ru') {
+    leng = keyObj.keyLengRu;
+  }
+  const keys = Object.keys(leng);
+  const values = Object.values(leng);
   console.log(`${keys}это мы`);
   console.log(`${values}это мы`);
   for (let i = 0; i < keys.length; i += 1) {
@@ -83,9 +113,11 @@ const changeLanguage = () => {
   let keys;
   let values;
   if (keyBoardBlock.classList.contains('block-key-board--eng')) {
+    localStorage.leng = 'en';
     keys = Object.keys(keyObj.keyLengEn);
     values = Object.values(keyObj.keyLengEn);
   } else if (keyBoardBlock.classList.contains('block-key-board--ru')) {
+    localStorage.leng = 'ru';
     keys = Object.keys(keyObj.keyLengRu);
     values = Object.values(keyObj.keyLengRu);
   }
@@ -101,18 +133,55 @@ const changeLanguage = () => {
 /* text entry on key click  */
 const addTextkeyInInput = (event) => {
   let text;
+  let length;
+  console.log(event);
+  if (keyBoardBlock.classList.contains('caps--active') && keyBoardBlock.classList.contains('block-key-board--eng')) {
+    length = keyObj.keyModEng;
+  } else if (keyBoardBlock.classList.contains('caps--active') && keyBoardBlock.classList.contains('block-key-board--ru')) {
+    length = keyObj.keyModRu;
+  } else if (keyBoardBlock.classList.contains('block-key-board--eng')) {
+    length = keyObj.keyLengEn;
+  } else if (keyBoardBlock.classList.contains('block-key-board--ru')) {
+    length = keyObj.keyLengRu;
+  }
   for (let i = 0; i < allKeys.length; i += 1) {
     if (allKeys[i].dataset.code === event.code) {
       console.log(allKeys[i].dataset.code);
+      console.log(event.code);
       allKeys[i].classList.add('key-board__key--active');
-      if (keyBoardBlock.classList.contains('block-key-board--eng')) {
-        text = keyObj.keyLengEn[event.code];
-      } else if (keyBoardBlock.classList.contains('block-key-board--ru')) {
-        text = keyObj.keyLengRu[event.code];
+      if (allKeys[i].dataset.code === 'Space') {
+        console.log('space сработал');
+        text = ' ';
+      } else if (allKeys[i].dataset.code === 'Tab') {
+        allKeys[i].classList.remove('key-board__key___key--bastard');
+        console.log('Tab сработал');
+        text = '  ';
+      } else {
+        if (keyBoardBlock.classList.contains('caps--active') && keyBoardBlock.classList.contains('block-key-board--eng')) {
+          length = keyObj.keyLengEn;
+        }
+        if (keyBoardBlock.classList.contains('caps--active') && keyBoardBlock.classList.contains('block-key-board--ru')) {
+          if (allKeys[i].dataset.code === 'Backquote'
+          || allKeys[i].dataset.code === 'BracketLeft'
+          || allKeys[i].dataset.code === 'BracketRight'
+          || allKeys[i].dataset.code === 'Semicolon'
+          || allKeys[i].dataset.code === 'Quote'
+          || allKeys[i].dataset.code === 'Comma'
+          || allKeys[i].dataset.code === 'Period') {
+            length = keyObj.keyModRu;
+          }
+        }
+        if (keyBoardBlock.classList.contains('caps--active') && keyBoardBlock.classList.contains('block-key-board--eng') && allKeys[i].dataset.code.length === 4) {
+          length = keyObj.keyModEng;
+        } else if (keyBoardBlock.classList.contains('caps--active') && keyBoardBlock.classList.contains('block-key-board--ru') && allKeys[i].dataset.code.length === 4) {
+          length = keyObj.keyModRu;
+        }
+        text = length[event.code];
       }
-      console.log(text);
+      console.log(`${length[event.code]}это код${text}`);
       if (!allKeys[i].classList.contains('key-board__key___key--bastard')) {
         input.value += text;
+        console.log(`${input.value}это ВАЛ`);
       }
     }
   }
@@ -354,36 +423,37 @@ document.addEventListener('keyup', checKeyUp);
 
 /* mouse event */
 const mouseClickDown = (event) => {
-  if (event.target.dataset.code === 'ShiftLeft' || event.target.dataset.code === 'ShiftRight') {
-    console.log(event.shiftKey);
-    keyBoardBlock.classList.toggle('shift--active');
-    shiftMod(event);
-  }
-  if (event.target.dataset.code === 'CapsLock') {
-    if (keyBoardBlock.classList.contains('caps--active')) {
-      keyBoardBlock.classList.toggle('caps--active');
-      capsMod(event);
-    } else {
-      keyBoardBlock.classList.toggle('caps--active');
-      capsMod(event);
+  if (event.target.classList.contains('key-board__key')) {
+    console.log(event);
+    if (event.target.dataset.code === 'ShiftLeft' || event.target.dataset.code === 'ShiftRight') {
+      console.log(event.shiftKey);
+      keyBoardBlock.classList.toggle('shift--active');
+      shiftMod(event);
     }
-  }
-  if (event.target.dataset.code === 'Backspace') {
-    backspaceInInput();
-  }
-  if (event.target.dataset.code === 'Delete') {
-    deleteInInput();
-  }
-  if (event.target.dataset.code === 'Enter') {
-    enterInInput();
-  }
-  addTextkeyInInput(event);
-  if (!event.target.classList.contains('key-board__key___key--bastard')) {
-    input.value += event.target.innerText;
+    if (event.target.dataset.code === 'CapsLock') {
+      if (keyBoardBlock.classList.contains('caps--active')) {
+        keyBoardBlock.classList.toggle('caps--active');
+        capsMod(event.target.dataset.code);
+      } else {
+        keyBoardBlock.classList.toggle('caps--active');
+        capsMod(event.target.dataset.code);
+      }
+    }
+    if (event.target.dataset.code === 'Backspace') {
+      backspaceInInput();
+    }
+    if (event.target.dataset.code === 'Delete') {
+      deleteInInput();
+    }
+    if (event.target.dataset.code === 'Enter') {
+      enterInInput();
+    }
+    addTextkeyInInput(event.target.dataset);
   }
 };
-keyBoardBlock.addEventListener('mousedown', mouseClickDown);
 
+keyBoardBlock.addEventListener('mousedown', mouseClickDown);
+console.log(typeof allKeys);
 const mouseClickUp = (event) => {
   console.log(event.target.dataset.code);
   console.log(event);
@@ -392,9 +462,14 @@ const mouseClickUp = (event) => {
     console.log('ppppppp');
     shiftMod(event);
   }
+  for (let i = 0; i < allKeys.length; i += 1) {
+    if (allKeys[i].dataset.code === event.target.dataset.code) {
+      console.log(allKeys[i].dataset.code);
+      allKeys[i].classList.remove('key-board__key--active');
+    }
+  }
 };
 keyBoardBlock.addEventListener('mouseup', mouseClickUp);
-console.log(allKeys);
 
 /* for copirate keys code in arr
 document.addEventListener('keydown', (event) => {
