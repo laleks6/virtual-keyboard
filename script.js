@@ -1,6 +1,5 @@
 import keyObj from './key.js';
 
-console.log(keyObj);
 if (localStorage.getItem('leng') === 'en') {
   localStorage.setItem('leng', 'en');
 } else if (localStorage.getItem('leng') === 'ru') {
@@ -9,13 +8,11 @@ if (localStorage.getItem('leng') === 'en') {
   localStorage.setItem('leng', 'en');
 }
 
-console.log(localStorage.getItem('num'));
 /* virtylakeybords */
 
 /* creat blocks */
 
 /* creat base block */
-console.log('gggg');
 const page = document.body;
 page.className = 'page';
 const screen = document.createElement('div');
@@ -55,7 +52,6 @@ screen.append(input);
   keyBoardBlock.append(key);
 };
 creatKeys(); */
-console.log(keyObj.keyLengEn);
 const creatKeys = () => {
   let leng;
   if (localStorage.getItem('leng') === 'en') {
@@ -65,8 +61,6 @@ const creatKeys = () => {
   }
   const keys = Object.keys(leng);
   const values = Object.values(leng);
-  console.log(`${keys}это мы`);
-  console.log(`${values}это мы`);
   for (let i = 0; i < keys.length; i += 1) {
     const creatKey = document.createElement('div');
     creatKey.textContent = values[i];
@@ -101,7 +95,6 @@ const creatKeys = () => {
     }
     creatKey.dataset.code = keys[i];
     keyBoardBlock.append(creatKey);
-    console.log(keys[i]);
   }
 };
 
@@ -134,7 +127,6 @@ const changeLanguage = () => {
 const addTextkeyInInput = (event) => {
   let text;
   let length;
-  console.log(event);
   if (keyBoardBlock.classList.contains('caps--active') && keyBoardBlock.classList.contains('block-key-board--eng')) {
     length = keyObj.keyModEng;
   } else if (keyBoardBlock.classList.contains('caps--active') && keyBoardBlock.classList.contains('block-key-board--ru')) {
@@ -146,15 +138,11 @@ const addTextkeyInInput = (event) => {
   }
   for (let i = 0; i < allKeys.length; i += 1) {
     if (allKeys[i].dataset.code === event.code) {
-      console.log(allKeys[i].dataset.code);
-      console.log(event.code);
       allKeys[i].classList.add('key-board__key--active');
       if (allKeys[i].dataset.code === 'Space') {
-        console.log('space сработал');
         text = ' ';
       } else if (allKeys[i].dataset.code === 'Tab') {
         allKeys[i].classList.remove('key-board__key___key--bastard');
-        console.log('Tab сработал');
         text = '  ';
       } else {
         if (keyBoardBlock.classList.contains('caps--active') && keyBoardBlock.classList.contains('block-key-board--eng')) {
@@ -178,10 +166,8 @@ const addTextkeyInInput = (event) => {
         }
         text = length[event.code];
       }
-      console.log(`${length[event.code]}это код${text}`);
       if (!allKeys[i].classList.contains('key-board__key___key--bastard')) {
         input.value += text;
-        console.log(`${input.value}это ВАЛ`);
       }
     }
   }
@@ -190,10 +176,7 @@ const addTextkeyInInput = (event) => {
 const backspaceInInput = () => {
   const countDelete = input.selectionStart;
   const resultInput = input.value.split('');
-  const removing = resultInput.splice(countDelete - 1, 1);
-  console.log(input.selectionStart);
-  console.log(removing);
-  console.log(resultInput);
+  resultInput.splice(countDelete - 1, 1);
   if (countDelete < 1) {
     input.selectionStart = countDelete;
     input.selectionEnd = countDelete;
@@ -207,10 +190,8 @@ const backspaceInInput = () => {
 const deleteInInput = () => {
   const countDelete = input.selectionStart;
   const resultInput = input.value.split('');
-  const removing = resultInput.splice(countDelete, 1);
-  console.log(input.selectionStart);
-  console.log(removing);
-  console.log(resultInput);
+  resultInput.splice(countDelete, 1);
+
   input.value = resultInput.join('');
   input.selectionEnd = countDelete;
   input.selectionStart = countDelete;
@@ -221,19 +202,16 @@ const enterInInput = () => {
   }\n${input.value.substring(input.selectionEnd, input.value.length)}`;
 };
 
-const shiftMod = (event) => {
+const shiftMod = () => {
   let keys;
   let values;
-  console.log(`shif Active -  ${event.shiftKey}`);
   if (keyBoardBlock.classList.contains('shift--active')) {
-    console.log('SHIFT MOD On');
     if (keyBoardBlock.classList.contains('block-key-board--eng')) {
       keys = Object.keys(keyObj.keyModEng);
       values = Object.values(keyObj.keyModEng);
       for (let i = 0; i < keys.length; i += 1) {
         for (let k = 0; k < allKeys.length; k += 1) {
           if (keys[i] === allKeys[k].dataset.code) {
-            console.log(`keys = ${keys[i]}  data = ${allKeys[k].dataset.code}`);
             allKeys[k].textContent = values[i];
           }
         }
@@ -245,7 +223,6 @@ const shiftMod = (event) => {
       for (let i = 0; i < keys.length; i += 1) {
         for (let k = 0; k < allKeys.length; k += 1) {
           if (keys[i] === allKeys[k].dataset.code) {
-            console.log(`keys = ${keys[i]}  data = ${allKeys[k].dataset.code}`);
             allKeys[k].textContent = values[i];
           }
         }
@@ -253,15 +230,12 @@ const shiftMod = (event) => {
     }
   }
   if (!keyBoardBlock.classList.contains('shift--active')) {
-    console.log(`shif Active -  ${event.shiftKey}`);
-    console.log('SHIFT MOD Off');
     if (keyBoardBlock.classList.contains('block-key-board--eng')) {
       keys = Object.keys(keyObj.keyLengEn);
       values = Object.values(keyObj.keyLengEn);
       for (let i = 0; i < keys.length; i += 1) {
         for (let k = 0; k < allKeys.length; k += 1) {
           if (keys[i] === allKeys[k].dataset.code) {
-            console.log(`keys = ${keys[i]}  data = ${allKeys[k].dataset.code}`);
             allKeys[k].textContent = values[i];
           }
         }
@@ -273,7 +247,6 @@ const shiftMod = (event) => {
       for (let i = 0; i < keys.length; i += 1) {
         for (let k = 0; k < allKeys.length; k += 1) {
           if (keys[i] === allKeys[k].dataset.code) {
-            console.log(`keys = ${keys[i]}  data = ${allKeys[k].dataset.code}`);
             allKeys[k].textContent = values[i];
           }
         }
@@ -286,14 +259,12 @@ const capsMod = () => {
   let keys;
   let values;
   if (keyBoardBlock.classList.contains('caps--active')) {
-    console.log('CAPS MOD On');
     if (keyBoardBlock.classList.contains('block-key-board--eng')) {
       keys = Object.keys(keyObj.keyModEng);
       values = Object.values(keyObj.keyModEng);
       for (let i = 0; i < keys.length; i += 1) {
         for (let k = 0; k < allKeys.length; k += 1) {
           if (allKeys[k].dataset.code.length === 4 && keys[i] === allKeys[k].dataset.code) {
-            console.log(`keys = ${keys[i]}  data = ${allKeys[k].dataset.code}`);
             allKeys[k].textContent = values[i];
           }
         }
@@ -305,7 +276,6 @@ const capsMod = () => {
       for (let i = 0; i < keys.length; i += 1) {
         for (let k = 0; k < allKeys.length; k += 1) {
           if (allKeys[k].dataset.code.length === 4 && keys[i] === allKeys[k].dataset.code) {
-            console.log(`keys = ${keys[i]}  data = ${allKeys[k].dataset.code}`);
             allKeys[k].textContent = values[i];
           } else if (allKeys[k].dataset.code === 'Backquote'
                     || allKeys[k].dataset.code === 'BracketLeft'
@@ -314,7 +284,6 @@ const capsMod = () => {
                     || allKeys[k].dataset.code === 'Quote'
                     || allKeys[k].dataset.code === 'Comma'
                     || allKeys[k].dataset.code === 'Period') {
-            console.log(`Лkeys = ${keys[i]}  Лdata = ${allKeys[k].dataset.code}`);
             allKeys[k].textContent = keyObj.keyModRu[allKeys[k].dataset.code];
           }
         }
@@ -322,14 +291,12 @@ const capsMod = () => {
     }
   }
   if (!keyBoardBlock.classList.contains('caps--active')) {
-    console.log('CAPS MOD Off');
     if (keyBoardBlock.classList.contains('block-key-board--eng')) {
       keys = Object.keys(keyObj.keyLengEn);
       values = Object.values(keyObj.keyLengEn);
       for (let i = 0; i < keys.length; i += 1) {
         for (let k = 0; k < allKeys.length; k += 1) {
           if (keys[i] === allKeys[k].dataset.code) {
-            console.log(`keys = ${keys[i]}  data = ${allKeys[k].dataset.code}`);
             allKeys[k].textContent = values[i];
           }
         }
@@ -341,7 +308,6 @@ const capsMod = () => {
       for (let i = 0; i < keys.length; i += 1) {
         for (let k = 0; k < allKeys.length; k += 1) {
           if (keys[i] === allKeys[k].dataset.code) {
-            console.log(`keys = ${keys[i]}  data = ${allKeys[k].dataset.code}`);
             allKeys[k].textContent = values[i];
           }
         }
@@ -353,7 +319,6 @@ const capsMod = () => {
 /* key pressing an shift for switch language */
 const secondClickHandlerKey = (event) => {
   if (event.shiftKey) {
-    console.log('shift сработал');
     if (keyBoardBlock.classList.contains('block-key-board--eng')) {
       keyBoardBlock.classList.remove('block-key-board--eng');
       keyBoardBlock.classList.add('block-key-board--ru');
@@ -365,7 +330,6 @@ const secondClickHandlerKey = (event) => {
     document.removeEventListener('keyup', secondClickHandlerKey);
     capsMod(event);
   } else {
-    console.log('убрал');
     document.removeEventListener('keyup', secondClickHandlerKey);
   }
 };
@@ -373,12 +337,10 @@ const secondClickHandlerKey = (event) => {
 const checKeyDown = (event) => {
   event.preventDefault();
   if (event.altKey) {
-    console.log('нажад алт');
     document.addEventListener('keyup', secondClickHandlerKey);
     document.addEventListener('keydown', checKeyDown);
   }
   if (event.shiftKey) {
-    console.log(event.shiftKey);
     keyBoardBlock.classList.toggle('shift--active');
     document.removeEventListener('keydown', checKeyDown);
     shiftMod(event);
@@ -408,13 +370,11 @@ document.addEventListener('keydown', checKeyDown);
 const checKeyUp = (event) => {
   if (keyBoardBlock.classList.contains('shift--active')) {
     keyBoardBlock.classList.toggle('shift--active');
-    console.log('ppppppp');
     shiftMod(event);
     document.addEventListener('keydown', checKeyDown);
   }
   for (let i = 0; i < allKeys.length; i += 1) {
     if (allKeys[i].dataset.code === event.code) {
-      console.log(allKeys[i].dataset.code);
       allKeys[i].classList.remove('key-board__key--active');
     }
   }
@@ -424,9 +384,7 @@ document.addEventListener('keyup', checKeyUp);
 /* mouse event */
 const mouseClickDown = (event) => {
   if (event.target.classList.contains('key-board__key')) {
-    console.log(event);
     if (event.target.dataset.code === 'ShiftLeft' || event.target.dataset.code === 'ShiftRight') {
-      console.log(event.shiftKey);
       keyBoardBlock.classList.toggle('shift--active');
       shiftMod(event);
     }
@@ -453,18 +411,13 @@ const mouseClickDown = (event) => {
 };
 
 keyBoardBlock.addEventListener('mousedown', mouseClickDown);
-console.log(typeof allKeys);
 const mouseClickUp = (event) => {
-  console.log(event.target.dataset.code);
-  console.log(event);
   if (keyBoardBlock.classList.contains('shift--active')) {
     keyBoardBlock.classList.toggle('shift--active');
-    console.log('ppppppp');
     shiftMod(event);
   }
   for (let i = 0; i < allKeys.length; i += 1) {
     if (allKeys[i].dataset.code === event.target.dataset.code) {
-      console.log(allKeys[i].dataset.code);
       allKeys[i].classList.remove('key-board__key--active');
     }
   }
