@@ -45,13 +45,6 @@ screen.append(input);
 
 /* creat keys */
 
-/* const creatKeys = () => {
-  const key = document.createElement('button');
-  key.className = 'key-board__key key';
-  key.textContent = '2';
-  keyBoardBlock.append(key);
-};
-creatKeys(); */
 const creatKeys = () => {
   let leng;
   if (localStorage.getItem('leng') === 'en') {
@@ -423,12 +416,3 @@ const mouseClickUp = (event) => {
   }
 };
 keyBoardBlock.addEventListener('mouseup', mouseClickUp);
-
-/* for copirate keys code in arr
-document.addEventListener('keydown', (event) => {
-  const code = event;
-  console.log(event.key);
-  console.log(code);
-  arrKeyCodeRu[event.code] = event.key;
-  console.log(arrKeyCodeRu);
-}); */
